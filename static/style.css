@@ -1,0 +1,47 @@
+/* Style for the tooltip */
+.tooltip {
+    position: absolute;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+/* Style for the bars */
+/* .bar {
+    fill: steelblue;
+} */
+
+/* Style for the X axis */
+.axis-x path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis-x text {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Style for the Y axis */
+.axis-y path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis-y text {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Style for the chart title */
+.chart-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-anchor: middle;
+}

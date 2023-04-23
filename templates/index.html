@@ -1,0 +1,135 @@
+
+<!-- Original reference: https://github.com/skolo-online/chat-gpt-starter -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Class: Explainable NLP">
+
+    <title>Explainable NLP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <!-- CSS -->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+  </head>
+  <body>
+
+    <header>
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Class assignment: Explainable NLP  by Hyemi Song (Hacker role)</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+  <div class="container">
+    <br>
+    <br>
+    <h1 class="mt-5">Analyzing LIME explanation with ChatGPT</h1>
+    <p class="lead">
+      Related paper: Rethinking Explainability as a Dialogue: A Practitioner's Perspective (<a href="https://arxiv.org/abs/2202.01875">Link</a>)
+    </p>
+    <ul>
+      <li>OpenAI API Key, which you can get here: <a href="https://openai.com/product#made-for-developers">OpenAI Website</a></li>
+    </ul>
+
+      <div id="list-group-default" class="list-group w-auto">
+        <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3">
+          <img src="{{ url_for('static', filename='images/face.png') }}" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+          <div class="d-flex gap-2 w-100 justify-content-between">
+            <div>
+              <p class="mb-0 opacity-75">Can you visualize the LIME explanation using an example code and data? I want to understand how LIME explains an NLP/ML model performance. (sentiment analysis)
+              </p>
+            </div>
+          </div>
+        </a>
+  
+       <div id="list-group-default" class="list-group w-auto">
+        <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3">
+          <img src="{{ url_for('static', filename='images/bot.png') }}" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+          <div class="d-flex gap-2 w-100 justify-content-between">
+            <div id="lime-chart"></div>
+            <div class="vis">
+              <p class="mb-0 opacity-75">Sure, in this code, we first load the IMDB dataset using Keras, and convert the training data back to text. We then split the training data into training and validation sets, and define and train a logistic regression model using a TF-IDF vectorizer. We make predictions on the validation set and calculate the accuracy score.
+
+                We then define a LimeTextExplainer object and choose a random text from the validation set to explain. We generate an explanation for the ML model's prediction on the chosen text using explain_instance method of LimeTextExplainer object. Finally, we print the explanation which shows the most important words that contribute to the ML model's prediction for the chosen text.</p>
+            </div>
+          </div>
+        </a>
+       </div>
+
+       <div id ="list-group" class="list-group w-auto"></div>
+       <div class="input-group mb-3">
+          <input type="text" class="form-control" id="chat-input">
+          <div class="input-group-append">
+            <button id="gpt-button" class="btn btn-primary">Ask ChatGPT</button>
+          </div>
+        </div>
+        
+  </div>
+</main>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <script>
+      $("#gpt-button").click(function(){
+        var question = $("#chat-input").val();
+
+        let html_data = '';
+        html_data += `
+        <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3">
+          <img src="{{ url_for('static', filename='images/face.png') }}" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+          <div class="d-flex gap-2 w-100 justify-content-between">
+            <div>
+              <p class="mb-0 opacity-75">${question}</p>
+            </div>
+          </div>
+        </a>
+        `;
+        $("#chat-input").val('');
+        $("#list-group").append(html_data);
+
+        // alert("The paragraph was clicked.")
+        //AJAX CALL TO SERVER
+        $.ajax({
+          type: "POST",
+          url: "/",
+          data: {'prompt': question },
+          success: function (data) {
+            let gpt_data = '';
+            gpt_data += `
+            <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3">
+              <img src="{{ url_for('static', filename='images/bot.png') }}" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+              <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                  <p class="mb-0 opacity-75">${data.answer}</p>
+                </div>
+              </div>
+            </a>
+            `;
+            $("#list-group").append(gpt_data);
+          }
+        })
+      })
+
+    </script>
+    <script src="{{ url_for('static', filename='lime_d3.js') }}"></script>
+  </body>
+</html>
